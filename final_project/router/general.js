@@ -31,25 +31,40 @@ public_users.get('/',function (req, res) {
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const isbn = req.params.isbn
+  res.send(books[isbn])
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const author = req.params.author;
+  const bookKeys = Object.keys(books);
+
+  const matchingBooks = bookKeys
+  .filter(key => books[key].author === author)
+  .map(key => books[key]);
+
+  res.send(matchingBooks)
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const title = req.params.title;
+  const bookKeys = Object.keys(books);
+  const matchingTitle = bookKeys
+  .filter(key => books[key].title === title)
+  .map(key => books[key])
+
+  res.send(matchingTitle)
 });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const isbn = req.params.isbn;
+  res.send(books[isbn].reviews);
 });
 
 module.exports.general = public_users;
