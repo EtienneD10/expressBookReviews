@@ -17,7 +17,7 @@ public_users.post("/register",(req,res)=>{
 
     if(!isValid(username)){
       users.push({"username":username,"password":password});
-      return res.status(200).json({message:"User successfully registered"});
+      return res.status(200).json({message:"Customer successfully registered"});
     }
 
     return res.status(404).json({message:"User already exists"});
@@ -44,28 +44,28 @@ public_users.get('/isbn/:isbn',function (req, res) {
 
 
 // Task 3 - Get books by Author
-public_users.get('/author/:author',function (req, res) {
-
+public_users.get('/author/:author', function (req, res) {
   const author = req.params.author;
-
   let filtered_books = Object.values(books)
-  .filter(book => book.author === author);
-
+    .filter(book => book.author.toLowerCase() === author.toLowerCase());
+  
+  if (filtered_books.length === 0) {
+    return res.status(404).json({message: "No books found for this author"});
+  }
   return res.status(200).json(filtered_books);
-
 });
 
 
 // Task 4 - Get books by Title
-public_users.get('/title/:title',function (req, res) {
-
+public_users.get('/title/:title', function (req, res) {
   const title = req.params.title;
-
   let filtered_books = Object.values(books)
-  .filter(book => book.title === title);
+    .filter(book => book.title.toLowerCase() === title.toLowerCase());
 
+  if (filtered_books.length === 0) {
+    return res.status(404).json({message: "No books found with this title"});
+  }
   return res.status(200).json(filtered_books);
-
 });
 
 
