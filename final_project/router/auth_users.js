@@ -47,7 +47,7 @@ regd_users.post("/login", (req,res) => {
   let accessToken = jwt.sign({ username }, "access", { expiresIn: "1h" });
   req.session.authorization = { accessToken, username };
 
-  res.status(200).json({ message:"Customer logged in succesfully" })
+  res.status(200).json({ message:"Login successful!" })
 });
 
 // Add a book review
