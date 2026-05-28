@@ -35,11 +35,12 @@ public_users.get('/',function (req, res) {
 
 
 // Task 2 - Get book by ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
-
+public_users.get('/isbn/:isbn', function (req, res) {
   const isbn = req.params.isbn;
+  if (!books[isbn]) {
+    return res.status(404).json({ message: `Book with ISBN ${isbn} not found` });
+  }
   return res.status(200).json(books[isbn]);
-
 });
 
 
@@ -99,25 +100,24 @@ public_users.get('/async/books', async function(req, res) {
 
 
 
-// Task 11 - Get book by ISBN using Promises
-public_users.get('/async/isbn/:isbn', (req, res) => {
+// Task 11 - Get book by ISBN using async/await (Corregido para ser simétrico)
+public_users.get('/async/isbn/:isbn', async function (req, res) {
   const isbn = req.params.isbn;
-  axios.get("http://localhost:5001/")
-    .then(response => {
-      const books = response.data;
-      if (!books[isbn]) {
-        return res.status(404).json({ message: `Book with ISBN ${isbn} not found` });
-      }
-      return res.status(200).json(books[isbn]);
-    })
-    .catch(error => {
-      return res.status(500).json({ message: error.message });
-    });
+  try {
+    const response = await axios.get("http://localhost:5001/");
+    const books = response.data;
+
+    if (!books[isbn]) {
+      return res.status(404).json({ message: `Book with ISBN ${isbn} not found` });
+    }
+    return res.status(200).json(books[isbn]);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 });
 
 
-
-// Task 12 - Get books by Author using async
+// Task 12 - Get books by Author using async/await (Este ya te lo tomó como perfecto)
 public_users.get('/async/author/:author', async function(req, res) {
   const author = req.params.author;
   try {
@@ -135,8 +135,7 @@ public_users.get('/async/author/:author', async function(req, res) {
 });
 
 
-
-// Task 13 - Get books by Title using async
+// Task 13 - Get books by Title using async/await (Corregido para ser simétrico)
 public_users.get('/async/title/:title', async function(req, res) {
   const title = req.params.title;
   try {
